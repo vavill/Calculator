@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_light">#FFFFFF</color>
+    <color name="secondary">#C5700B</color>
+    <color name="text_light">#000000</color>
+    <color name="addition_text_light">#DCDCDC</color>
+    <color name="text_result_light">#191919</color>
+
+    <color name="primary_dark">#000000</color>
+    <color name="text_dark">#FFFFFF</color>
+    <color name="addition_text_dark">#DBDBDB</color>
+    <color name="text_result_dark">#FFFFFF</color>
+
+
+</resources>

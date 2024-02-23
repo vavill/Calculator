@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:tint="@color/secondary"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Горизонтальная полоса -->
+    <path
+        android:pathData="M3,12L21,12"
+        android:strokeWidth="2"
+        android:strokeColor="#000000"/>
+
+    <!-- Точка над полосой -->
+    <path
+        android:pathData="M12,4L12,6"
+        android:strokeWidth="2"
+        android:strokeColor="#000000"/>
+
+    <!-- Точка под полосой -->
+    <path
+        android:pathData="M12,18L12,20"
+        android:strokeWidth="2"
+        android:strokeColor="#000000"/>
+
+</vector>

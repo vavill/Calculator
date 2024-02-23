@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Calculator" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/material_dynamic_primary0</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="fontFamily">@font/montserrat_alternates</item>
+        <item name="android:textSize">23sp</item>
+        <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+    </style>
+
+    <style name="TextViewSecondaryStyle">
+        <item name="android:textColor">@color/addition_text_dark</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextViewResultStyle">
+        <item name="android:textColor">@color/text_result_dark</item>
+        <item name="android:textSize">@dimen/textSize_TextViewResult</item>
+    </style>
+
+    <style name="TextViewCalculationStyle">
+        <item name="android:textColor">@color/text_result_dark</item>
+        <item name="android:textSize">@dimen/textSize_TextViewCalculation</item>
+        <item name="fontFamily">@font/montserrat_alternates_medium</item>
+        <item name="android:textColorHint">@color/text_dark</item>
+    </style>
+
+
+</resources>
