@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import com.example.calculator.databinding.ActivityMainBinding
 import com.notkamui.keval.Keval
@@ -107,21 +108,9 @@ class MainActivity : AppCompatActivity() {
 
     // обработчик нажатий для цифр 0-9
     private fun setClickListenersForNumbers() = with(binding) {
-        val list = listOf(
-            linearRow1.children,
-            linearRow2.children,
-            linearRow3.children,
-            linearRow4.children,
-            linearRow5.children)
-
-        list.forEach { view ->
-            val iterator = view.iterator()
-            while (iterator.hasNext()) {
-                val item = iterator.next()
-                if ((item is TextView) && (item.text.toString() in "0".."9")) {
+        constraintBottomSide.forEach { item ->
+             if ((item is TextView) && (item.text.toString() in "0".."9"))
                     item.setOnClickListener { numbersOnClick(it as TextView) }
-                }
-            }
         }
     }
 
