@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/Theme.Calculator"
+    tools:context=".CalculatorFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvPrevCalculation2"
+            style="@style/TextViewSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvPrevResult2"
+            style="@style/TextViewSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="30dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvPrevCalculation"
+            style="@style/TextViewSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvPrevResult"
+            style="@style/TextViewSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="30dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvCalculation"
+            style="@style/TextViewCalculationStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:hint="0" />
+
+        <TextView
+            android:id="@+id/tvResult"
+            style="@style/TextViewResultStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:focusable="true"
+            android:maxLines="1"
+            android:text="= 0"
+            android:textColorHint="@color/text_light" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/text_light"
+        android:paddingHorizontal="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/linearLayout"
+
+        />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintBottomSide"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.5">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnClear"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="AC"
+            android:textAlignment="center"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintBottom_toTopOf="@id/btn7"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@+id/btnBackspace"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnBackspace"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/ic_backspace"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/btnClear"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@+id/btnPercent"
+            app:layout_constraintStart_toEndOf="@+id/btnClear"
+            app:layout_constraintTop_toTopOf="@+id/btnClear"
+            tools:ignore="ContentDescription">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnPercent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="%"
+            android:textAlignment="center"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintBottom_toBottomOf="@+id/btnBackspace"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@+id/btnDivide"
+            app:layout_constraintStart_toEndOf="@+id/btnBackspace"
+            app:layout_constraintTop_toTopOf="@+id/btnBackspace" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnDivide"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/ic_divide"
+            android:textAlignment="center"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintBottom_toBottomOf="@+id/btnPercent"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnPercent"
+            app:layout_constraintTop_toTopOf="@+id/btnPercent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn7"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="7"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/btn4"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@+id/btn8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnClear" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn8"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="8"
+            android:textAlignment="center"
+            app:layout_constraintBaseline_toBaselineOf="@+id/btn7"
+            app:layout_constraintBaseline_toBottomOf="@id/btn7"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@+id/btn9"
+            app:layout_constraintStart_toEndOf="@+id/btn7" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn9"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="9"
+            android:textAlignment="center"
+            app:layout_constraintBaseline_toBaselineOf="@+id/btn8"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@+id/btnMultiply"
+            app:layout_constraintStart_toEndOf="@+id/btn8" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btnMultiply"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/ic_multiply"
+            android:textAlignment="center"
+            android:textColor="?attr/colorSecondary"
+            app:layout_constraintBottom_toBottomOf="@+id/btn9"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn9"
+            app:layout_constraintTop_toTopOf="@+id/btn9" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="4"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@id/btn1"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/btn5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn7" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="5"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/btn4"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/btn6"
+            app:layout_constraintStart_toEndOf="@id/btn4"
+            app:layout_constraintTop_toTopOf="@+id/btn4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="6"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/btn5"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/btnSubtract"
+            app:layout_constraintStart_toEndOf="@id/btn5"
+            app:layout_constraintTop_toTopOf="@+id/btn5" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnSubtract"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="—"
+            android:textAlignment="center"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn6"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn6"
+            app:layout_constraintTop_toTopOf="@+id/btn6" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="1"
+            android:textAlignment="center"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/btn2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="2"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/btn1"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/btn3"
+            app:layout_constraintStart_toEndOf="@id/btn1"
+            app:layout_constraintTop_toBottomOf="@id/btn4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="3"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/btn2"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/btnAdd"
+            app:layout_constraintStart_toEndOf="@id/btn2"
+            app:layout_constraintTop_toBottomOf="@id/btn4" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnAdd"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-light"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="+"
+            android:textAlignment="center"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="@+id/btn3"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn3"
+            app:layout_constraintTop_toTopOf="@id/btn3" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/actionButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text=""
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/btn0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn1" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btn0"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text="0"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/btnPoint"
+            app:layout_constraintStart_toEndOf="@id/actionButton"
+            app:layout_constraintTop_toTopOf="@+id/actionButton" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/btnPoint"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:gravity="center"
+            android:text=","
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toStartOf="@id/flEquals"
+            app:layout_constraintStart_toEndOf="@id/btn0"
+            app:layout_constraintTop_toTopOf="@+id/btn0" />
+
+        <FrameLayout
+            android:id="@+id/flEquals"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1.15:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnPoint"
+            app:layout_constraintTop_toTopOf="@+id/btnPoint">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/btnEquals"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="11dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/ic_circle"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center"
+                android:text="="
+                android:textColor="@color/primary_light"
+                android:textSize="40sp" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
