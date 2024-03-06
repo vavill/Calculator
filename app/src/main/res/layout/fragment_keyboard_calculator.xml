@@ -4,92 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:theme="@style/Theme.Calculator"
-    tools:context=".CalculatorFragment">
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:paddingHorizontal="15dp"
-        android:paddingBottom="20dp"
-        app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tvPrevCalculation2"
-            style="@style/TextViewSecondaryStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/tvPrevResult2"
-            style="@style/TextViewSecondaryStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginBottom="30dp"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/tvPrevCalculation"
-            style="@style/TextViewSecondaryStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/tvPrevResult"
-            style="@style/TextViewSecondaryStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginBottom="30dp"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/tvCalculation"
-            style="@style/TextViewCalculationStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:hint="0" />
-
-        <TextView
-            android:id="@+id/tvResult"
-            style="@style/TextViewResultStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:focusable="true"
-            android:maxLines="1"
-            android:text="= 0"
-            android:textColorHint="@color/text_light" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginBottom="5dp"
-        android:background="@color/text_light"
-        android:paddingHorizontal="30dp"
-        app:layout_constraintBottom_toBottomOf="@id/linearLayout"
-
-        />
+    tools:context=".fragments.KeyboardCalculatorFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintBottomSide"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.5">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/btnClear"

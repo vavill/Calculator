@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentResultCalculator"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".fragments.ResultCalculatorFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp"
+        android:paddingBottom="20dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvPrevCalculation2"
+            style="@style/TextViewSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginTop="50dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvPrevResult2"
+            style="@style/TextViewSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="30dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvPrevCalculation"
+            style="@style/TextViewSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginTop="30dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvPrevResult"
+            style="@style/TextViewSecondaryStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="30dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvCalculation"
+            style="@style/TextViewCalculationStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginTop="30dp"
+            android:hint="0" />
+
+        <TextView
+            android:id="@+id/tvResult"
+            style="@style/TextViewResultStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:focusable="true"
+            android:maxLines="1"
+            android:text="= 0"
+            android:textColorHint="@color/text_light" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/text_light"
+        android:paddingHorizontal="30dp"
+        app:layout_constraintBottom_toBottomOf="@id/linearLayout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

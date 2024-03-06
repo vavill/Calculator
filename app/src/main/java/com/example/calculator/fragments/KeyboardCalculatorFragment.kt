@@ -1,4 +1,4 @@
-package com.example.calculator
+package com.example.calculator.fragments
 
 import android.Manifest
 import android.content.Intent
@@ -15,8 +15,14 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import com.example.calculator.CalculatorViewModel
+import com.example.calculator.MainActivity2
+import com.example.calculator.R
 import com.example.calculator.adapter.MainActivity3
-import com.example.calculator.databinding.FragmentCalculatorBinding
+import com.example.calculator.databinding.FragmentKeyboardCalculatorBinding
+import com.example.calculator.databinding.FragmentResultCalculatorBinding
 import com.notkamui.keval.Keval
 import com.notkamui.keval.KevalInvalidExpressionException
 import com.notkamui.keval.KevalInvalidSymbolException
@@ -26,9 +32,34 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.round
 
-class CalculatorFragment : Fragment() {
+class KeyboardCalculatorFragment : Fragment() {
 
-    lateinit var binding: FragmentCalculatorBinding
+    lateinit var binding: FragmentKeyboardCalculatorBinding
+    lateinit var bindingResult: FragmentResultCalculatorBinding
+
+    companion object {
+        @JvmStatic
+        lateinit var instance: KeyboardCalculatorFragment
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        bindingResult = (requireActivity().supportFragmentManager
+            .findFragmentById(R.id.fragmentContainerResult) as? ResultCalculatorFragment)!!
+            .binding
+
+        binding.actionButton.setOnClickListener {
+            CoroutineScope(CoroutineName("myScope")).launch {
+                requestPermissions()
+            }
+
+            val intent = Intent(requireActivity(), MainActivity3::class.java)
+            intent.putExtra(MainActivity2.KEY, bindingResult.tvResult.text.toString())
+            startActivity(intent)
+        }
+
+        setClickListenersForNumbers()
+        setOnClickListenersOperations()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,89 +70,8 @@ class CalculatorFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentCalculatorBinding.inflate(layoutInflater)
-
-        binding.actionButton.setOnClickListener {
-            CoroutineScope(CoroutineName("myScope")).launch {
-                requestPermissions()
-            }
-
-            val intent = Intent(requireActivity(), MainActivity3::class.java)
-            intent.putExtra(MainActivity2.KEY, binding.tvResult.text.toString())
-            startActivity(intent)
-        }
-
-
-        binding.tvResult.visibility = View.GONE
-
-        setClickListenersForNumbers()
-        setOnClickListenersOperations()
-
-        // отслеживание изменений в tvCalculation
-        binding.tvCalculation.addTextChangedListener(object : TextWatcher {
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if (isResultFocused()) {
-                    addToHistory()
-                    unfocusResult()
-                }
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                val tvR = binding.tvResult
-                when (s.toString()) {
-                    "0" -> {
-                        tvR.text = ""
-                        tvR.visibility = View.GONE
-                    }
-
-                    "" -> {
-                        tvR.text = "0"
-                        tvR.visibility = View.GONE
-                        binding.btnClear.text = "AC"
-                    }
-
-                    else -> {
-                        binding.btnClear.text = "C"
-
-                        // пытаемся вычислить выражение
-                        try {
-                            val text = s.toString()
-                                .replace("÷", "/")
-                                .replace("×", "*")
-
-                            if (text[text.lastIndex] in '0'..'9') {
-                                val result = Keval.eval(text)
-                                tvR.text = "= ${hasDecimalPart(result)}"
-                                tvR.visibility = View.VISIBLE
-                            }
-
-                        } catch (_: KevalInvalidExpressionException) {
-
-                        } catch (e: KevalZeroDivisionException) {
-                            tvR.text = "= Разделить на ноль нельзя"
-                        } catch (_: KevalInvalidSymbolException) {
-
-                        }
-                    }
-                }
-            }
-        })
-    }
-
-    private fun isResultFocused(): Boolean {
-        // какая то дичь
-        val density = requireActivity().resources.displayMetrics.density
-        val tvResultCurrentTextSize = round(binding.tvResult.textSize / density)
-        val textSizeTextViewCalculation =
-            requireActivity().resources.getDimension(R.dimen.textSize_TextViewCalculation) / density
-
-        // сравнение размера шрифта (текущий размер шрифта tvResult == большой черный шрифт)
-        return tvResultCurrentTextSize == textSizeTextViewCalculation
+        binding = FragmentKeyboardCalculatorBinding.inflate(layoutInflater)
+        instance = this
     }
 
     // обработчик нажатий для цифр 0-9
@@ -134,18 +84,18 @@ class CalculatorFragment : Fragment() {
 
     // добавление текста в tvCalculation
     private fun numbersOnClick(view: TextView) {
-        if (isResultFocused())
-            binding.tvCalculation.text = ""
+        if (ResultCalculatorFragment.instance.isResultFocused())
+            bindingResult.tvCalculation.text = ""
 
-        binding.tvCalculation.text = buildString {
-            append(binding.tvCalculation.text.toString())
+        bindingResult.tvCalculation.text = buildString {
+            append(bindingResult.tvCalculation.text.toString())
             append(view.text)
         }
     }
 
     // обработчик нажатий для операций
     private fun setOnClickListenersOperations() {
-        val tvC = binding.tvCalculation
+        val tvC = bindingResult.tvCalculation
 
         // AC button
         binding.btnClear.setOnClickListener {
@@ -228,61 +178,29 @@ class CalculatorFragment : Fragment() {
     }
 
     private fun isLastSymbolNumberAndNotNull() =
-        binding.tvCalculation.text.isNotEmpty() && binding.tvCalculation.text.last() in '0'..'9'
-
-    private fun addToHistory() {
-        if (binding.tvPrevResult.text.isNotEmpty()) {
-            binding.tvPrevResult2.visibility = View.VISIBLE
-            binding.tvPrevCalculation2.visibility = View.VISIBLE
-        }
-
-        binding.tvPrevResult.visibility = View.VISIBLE
-        binding.tvPrevCalculation.visibility = View.VISIBLE
-
-        binding.tvPrevCalculation2.text = binding.tvPrevCalculation.text
-        binding.tvPrevResult2.text = binding.tvPrevResult.text
-
-        binding.tvPrevCalculation.text = binding.tvCalculation.text
-        binding.tvPrevResult.text = binding.tvResult.text
-
-    }
+        bindingResult.tvCalculation.text.isNotEmpty() && bindingResult.tvCalculation.text.last() in '0'..'9'
 
     private fun clearHistory() {
-        binding.tvPrevResult
+        bindingResult.tvPrevResult
             .also { it.text = "" }
             .visibility = View.INVISIBLE
-        binding.tvPrevResult2
+        bindingResult.tvPrevResult2
             .also { it.text = "" }
             .visibility = View.INVISIBLE
-        binding.tvPrevCalculation
+        bindingResult.tvPrevCalculation
             .also { it.text = "" }
             .visibility = View.INVISIBLE
-        binding.tvPrevCalculation2
+        bindingResult.tvPrevCalculation2
             .also { it.text = "" }
             .visibility = View.INVISIBLE
 
     }
 
-    private fun focusResult() {
-        if (binding.tvResult.isVisible) {
-            binding.tvResult.setTextAppearance(R.style.TextViewCalculationStyle)
-            binding.tvCalculation.setTextAppearance(R.style.TextViewResultStyle)
-
+    private fun focusResult() = with(bindingResult) {
+        if (tvResult.isVisible) {
+            tvResult.setTextAppearance(R.style.TextViewCalculationStyle)
+            tvCalculation.setTextAppearance(R.style.TextViewResultStyle)
         }
-    }
-
-    private fun unfocusResult() {
-        binding.tvResult.setTextAppearance(R.style.TextViewResultStyle)
-        binding.tvCalculation.setTextAppearance(R.style.TextViewCalculationStyle)
-    }
-
-    // убираем дробную часть в tvResult, если *.0
-    private fun hasDecimalPart(number: Double): String {
-        val integerPart = number.toInt()
-        return if (number == integerPart.toDouble())
-            integerPart.toString()
-        else
-            number.toString()
     }
 
     suspend private fun requestPermissions() {
@@ -317,13 +235,22 @@ class CalculatorFragment : Fragment() {
     }
 
     private fun hasLocationForegroundPermission() =
-        ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ActivityCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
     private fun hasLocationBackgroundPermission() =
-        ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ActivityCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
     private fun hasWriteContactsPermission() =
-        ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED
+        ActivityCompat.checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.WRITE_CONTACTS
+        ) == PackageManager.PERMISSION_GRANTED
 
 
 }
