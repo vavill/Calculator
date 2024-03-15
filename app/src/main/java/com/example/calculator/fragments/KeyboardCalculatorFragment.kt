@@ -1,51 +1,53 @@
 package com.example.calculator.fragments
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.os.bundleOf
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import com.example.calculator.CalculatorViewModel
-import com.example.calculator.MainActivity2
+import com.example.calculator.ButtonNames
+import com.example.calculator.adapter.MainActivity2
 import com.example.calculator.R
 import com.example.calculator.adapter.MainActivity3
 import com.example.calculator.databinding.FragmentKeyboardCalculatorBinding
 import com.example.calculator.databinding.FragmentResultCalculatorBinding
 import com.notkamui.keval.Keval
 import com.notkamui.keval.KevalInvalidExpressionException
-import com.notkamui.keval.KevalInvalidSymbolException
-import com.notkamui.keval.KevalZeroDivisionException
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.math.round
 
 class KeyboardCalculatorFragment : Fragment() {
 
-    lateinit var binding: FragmentKeyboardCalculatorBinding
-    lateinit var bindingResult: FragmentResultCalculatorBinding
+    private var _binding: FragmentKeyboardCalculatorBinding? = null
+    private val binding get() = requireNotNull(_binding)
 
     companion object {
-        @JvmStatic
-        lateinit var instance: KeyboardCalculatorFragment
+        fun newInstance() = KeyboardCalculatorFragment()
+
+        const val KEYBOARD_REQUEST_KEY = "KEYBOARD_REQUEST_KEY"
+        const val KEYBOARD_RESULT_KEY = "KEYBOARD_RESULT_KEY"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        bindingResult = (requireActivity().supportFragmentManager
-            .findFragmentById(R.id.fragmentContainerResult) as? ResultCalculatorFragment)!!
-            .binding
 
         binding.actionButton.setOnClickListener {
             CoroutineScope(CoroutineName("myScope")).launch {
@@ -53,7 +55,7 @@ class KeyboardCalculatorFragment : Fragment() {
             }
 
             val intent = Intent(requireActivity(), MainActivity3::class.java)
-            intent.putExtra(MainActivity2.KEY, bindingResult.tvResult.text.toString())
+            intent.putExtra(MainActivity2.KEY, "")
             startActivity(intent)
         }
 
@@ -65,16 +67,15 @@ class KeyboardCalculatorFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentKeyboardCalculatorBinding.inflate(layoutInflater)
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = FragmentKeyboardCalculatorBinding.inflate(layoutInflater)
-        instance = this
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
     }
 
-    // обработчик нажатий для цифр 0-9
     private fun setClickListenersForNumbers() = with(binding) {
         constraintBottomSide.forEach { item ->
             if ((item is TextView) && (item.text.toString() in "0".."9"))
@@ -82,126 +83,71 @@ class KeyboardCalculatorFragment : Fragment() {
         }
     }
 
-    // добавление текста в tvCalculation
     private fun numbersOnClick(view: TextView) {
-        if (ResultCalculatorFragment.instance.isResultFocused())
-            bindingResult.tvCalculation.text = ""
+        sendResult(view.text.toString())
+    }
 
-        bindingResult.tvCalculation.text = buildString {
-            append(bindingResult.tvCalculation.text.toString())
-            append(view.text)
-        }
+    private fun sendResult(resultKey: String) {
+        requireActivity().supportFragmentManager.setFragmentResult(
+            KEYBOARD_REQUEST_KEY, bundleOf(
+                KEYBOARD_RESULT_KEY to resultKey
+            )
+        )
     }
 
     // обработчик нажатий для операций
     private fun setOnClickListenersOperations() {
-        val tvC = bindingResult.tvCalculation
 
         // AC button
         binding.btnClear.setOnClickListener {
             if (binding.btnClear.text == "C") {
-                tvC.text = ""
-                tvC.setHint("0")
+                sendResult("CLEAR_C_VALUE")
             } else
-                clearHistory()
+                sendResult("CLEAR_AC_VALUE")
         }
 
         // Backspace button
         binding.btnBackspace.setOnClickListener {
-            if (tvC.length() == 1) {
-                tvC.text = ""
-                tvC.setHint("0")
-            } else
-                tvC.text = tvC.text.dropLast(1)
+            sendResult("BACKSPACE_VALUE")
         }
 
         // % button
         binding.btnPercent.setOnClickListener {
-            try {
-                tvC.text =
-                    Keval.eval("(${tvC.text})/100").toString()
-            } catch (_: KevalInvalidExpressionException) {
-
-            }
+            sendResult("PERCENT_VALUE")
         }
 
         // Divide button
         binding.btnDivide.setOnClickListener {
-            if (isLastSymbolNumberAndNotNull())
-                tvC.text = buildString {
-                    append(tvC.text)
-                    append("÷")
-                }
+            sendResult("DIVIDE_VALUE")
         }
 
         // Multiply button
         binding.btnMultiply.setOnClickListener {
-            if (isLastSymbolNumberAndNotNull())
-                tvC.text = buildString {
-                    append(tvC.text)
-                    append("×")
-                }
+            sendResult("MULTIPLY_VALUE")
         }
 
         // Subtract button
         binding.btnSubtract.setOnClickListener {
-            if (isLastSymbolNumberAndNotNull())
-                tvC.text = buildString {
-                    append(tvC.text)
-                    append("-")
-                }
+            sendResult("SUBTRACT_VALUE")
         }
 
         // Addition button
         binding.btnAdd.setOnClickListener {
-            if (isLastSymbolNumberAndNotNull())
-                tvC.text = buildString {
-                    append(tvC.text)
-                    append("+")
-                }
+            sendResult("ADD_VALUE")
         }
 
         binding.btnPoint.setOnClickListener {
-            if (isLastSymbolNumberAndNotNull())
-                tvC.text = buildString {
-                    append(tvC.text)
-                    append(".")
-                }
-            else if (tvC.text.isEmpty())
-                tvC.text = "0."
+            sendResult("POINT_VALUE")
         }
 
         // Equals button
         binding.btnEquals.setOnClickListener {
-            focusResult()
+            sendResult("EQUALS_VALUE")
         }
     }
 
-    private fun isLastSymbolNumberAndNotNull() =
-        bindingResult.tvCalculation.text.isNotEmpty() && bindingResult.tvCalculation.text.last() in '0'..'9'
 
-    private fun clearHistory() {
-        bindingResult.tvPrevResult
-            .also { it.text = "" }
-            .visibility = View.INVISIBLE
-        bindingResult.tvPrevResult2
-            .also { it.text = "" }
-            .visibility = View.INVISIBLE
-        bindingResult.tvPrevCalculation
-            .also { it.text = "" }
-            .visibility = View.INVISIBLE
-        bindingResult.tvPrevCalculation2
-            .also { it.text = "" }
-            .visibility = View.INVISIBLE
-
-    }
-
-    private fun focusResult() = with(bindingResult) {
-        if (tvResult.isVisible) {
-            tvResult.setTextAppearance(R.style.TextViewCalculationStyle)
-            tvCalculation.setTextAppearance(R.style.TextViewResultStyle)
-        }
-    }
+    /////////// testing features below
 
     suspend private fun requestPermissions() {
         val permissions = mutableListOf<String>()
@@ -251,6 +197,4 @@ class KeyboardCalculatorFragment : Fragment() {
             requireActivity(),
             Manifest.permission.WRITE_CONTACTS
         ) == PackageManager.PERMISSION_GRANTED
-
-
 }
